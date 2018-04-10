@@ -10,31 +10,45 @@
 
 def find_lake_volume(lake_data):
     ans = 0
+    right_run = []
+    left_run = []
     lake_len = len(lake_data) -1
     left_max_height = lake_data[0]
     right_max_height = lake_data[-1]
+
+    # find dips forward
+    # find dips backwards
+    # compare dips to find smallest dips and append to ans
 
     for i in range(lake_len):
         print("front : " + str(lake_data[i]))
         print("front+ : " + str(lake_data[i+ 1]))
 
+        # find dips forward
         if lake_data[i] >= left_max_height:
-            left_max_height.append(max(lake_data[i],lake_data[i - 1]))
-            print(left_max_height)
+            left_max_height = lake_data[i]
+            left_run.append(left_max_height)
+        else:
+            left_run.append(left_max_height)
 
+        # find dips backwards
         if lake_data[lake_len - i] >= right_max_height:
             right_max_height = lake_data[lake_len -i]
-            print(right_max_height)
-
-
+            right_run.append(right_max_height)
+        else:
+            right_run.append(left_max_height)
+    # compare dips to find smallest dips and append to ans
+    print(left_run, right_run)
+    for i in range(lake_len):
+        ans += min(left_run[i], right_run[i])
 
     # for i in range
-        # if lake_data[i+1] < max_height:
-        #     dip = max_height - lake_data[i+1]
-        #     ans += dip
-        #     print("dip: ", str(dip))
-
-
+    #     if lake_data[i+1] < max_height:
+    #         dip = max_height - lake_data[i+1]
+    #         ans += dip
+    #         print("dip: ", str(dip))
+    #
+    #
 
 
 
