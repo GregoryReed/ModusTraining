@@ -10,53 +10,39 @@
 
 def find_lake_volume(lake_data):
     ans = 0
-    right_run = []
-    left_run = []
-    lake_len = len(lake_data) -1
+    lake_len = len(lake_data) - 1
+    right_run = [0]
+    left_run = [0]
     left_max_height = lake_data[0]
     right_max_height = lake_data[-1]
 
-    # find dips forward
-    # find dips backwards
-    # compare dips to find smallest dips and append to ans
-
     for i in range(lake_len):
-        print("front : " + str(lake_data[i]))
-        print("front+ : " + str(lake_data[i+ 1]))
-
-        # find dips forward
+        # find left peak
         if lake_data[i] >= left_max_height:
             left_max_height = lake_data[i]
-            left_run.append(left_max_height)
-        else:
-            left_run.append(left_max_height)
 
-        # find dips backwards
-        if lake_data[lake_len - i] >= right_max_height:
-            right_max_height = lake_data[lake_len -i]
-            right_run.append(right_max_height)
+        # append dip size
+        if lake_data[i+1] < left_max_height:
+            left_run.append(left_max_height - lake_data[i+1])
         else:
-            right_run.append(left_max_height)
-    # compare dips to find smallest dips and append to ans
-    print(left_run, right_run)
+            left_run.append(0)
+
+        # find right peak
+        if lake_data[lake_len - i] >= right_max_height:
+            right_max_height = lake_data[lake_len - i]
+
+        # append dip size
+        if lake_data[lake_len - i - 1] < right_max_height:
+            right_run.append(right_max_height - lake_data[lake_len - i - 1])
+        else:
+            right_run.append(0)
+
+    right_run = right_run[::-1]
+
+    # add smallest dip to answer
     for i in range(lake_len):
         ans += min(left_run[i], right_run[i])
-
-    # for i in range
-    #     if lake_data[i+1] < max_height:
-    #         dip = max_height - lake_data[i+1]
-    #         ans += dip
-    #         print("dip: ", str(dip))
-    #
-    #
-
-
-
-        # print("back: " + str(lake_data[lake_len - i]))
-        # print("back- : " + str(lake_data[lake_len - i - 1]))
-
-    return ans
-
+    return(ans)
 
 
 def test():
@@ -172,12 +158,13 @@ def test():
     answer = find_lake_volume(test4)
     assert answer == 129507, "Test4 - Answer was %s not 129507" % answer
 
-
 def main():
     example = [1, 3, 2, 4, 1, 3, 1, 4, 5, 2, 2, 1, 4, 2, 2]
 
     answer = find_lake_volume(example)
     assert answer == 15, "answer was not 15, answer was: " + str(answer)
+
+    test()
 
 if __name__ == '__main__':
     main()
