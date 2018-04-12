@@ -7,41 +7,31 @@
 """
 
 import timeit
+import re
 
+def expand(block):
+    # break chunk into number/string pairs
+    block = block.split('[')
+
+    # multiply number by string without trailing ]
+    return int(block[0]) * block[1][:-1]
 
 def decompressor(compressed_string):
     """decompress a given string into its full form.
     """
-    count = 0
-    index = 0
-    for i, char in enumerate(reversed(compressed_string)):
-        if char == ']':
-            print("delimiter")
-            index = i
-            count += 1
 
-        if char == '[':
-            print('eascape')
-            print(compressed_string[index+1: i])
+    # find all inner compressions
+    block_index = [(m.start(0), m.end(0)) for m in re.finditer(r"\d+\[+\w+]", compressed_string)]
 
+    # work backwards to expand inner compressions
+    for block in reversed(block_index):
+        compressed_string = compressed_string[:block[0]] + expand(compressed_string[block[0]:block[1]]) + compressed_string[block[1]:]
 
+    # if no compressions left retrun ans else call decompressor again
+    return compressed_string if not block_index else decompressor(compressed_string)
+        
+    
 
-    # openers, closers = [], []
-    # depth = 0
-    # # find all [] and append location to array
-    # for i, char in enumerate(compressed_string):
-    #     if char == '[' and :
-    #         depth += 1
-    #         openers.append(i)
-    #
-    #     if char == ']':
-    #         closers.append(i)
-    #
-    # print(openers)
-    # print(closers)
-
-    # create pairs of
-    #
 
 def test():
 
@@ -57,11 +47,25 @@ def test():
     assert answer == 'aaabaaab', \
         "answer was %s, not aaabaaab: " % answer
 
+    # recursive
+    test2 = 'long2[chain]withlots3[3[of]chain]1[and2[some2[recursion]]]'
+    answer = decompressor(test2)
+    assert answer == 'longchainchainwithlotsofofofchainofofofchainofofofchainandsomerecursionrecursionsomerecursionrecursion', \
+        "answer was %s, not aaabaaab: " % answer
+
+    # banger
+    test3 = '2[2[2[2[2[2[a]b]c]d]e]f]g'
+    answer = decompressor(test3)
+    assert answer == 'aabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefaabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefg', \
+        "answer was %s, not aabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefaabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefg: " % answer
+
     print("All tests Passed!")
 
 def main():
 
-    example = '3[abc]4[ab]c'
+    example = '3[ab0[grgrgrgrgr]c]4[ab]c'
+    # example = '20[3[a]b]'
+    # example = 'abc'
     answer = decompressor(example)
     assert answer == 'abcabcabcababababc', \
         "answer was %s, not abcabcabcababababc: " %answer
