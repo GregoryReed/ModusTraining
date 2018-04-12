@@ -10,14 +10,22 @@ import timeit
 import re
 
 def expand(block):
+    """expand a string according to the number in the beginning.
+    @param: block str - '10[string]'
+    @return: string - 2[string] --> stringstring
+    """
     # break chunk into number/string pairs
     block = block.split('[')
 
     # multiply number by string without trailing ]
     return int(block[0]) * block[1][:-1]
 
+
 def decompressor(compressed_string):
-    """decompress a given string into its full form.
+    """recursivley decompress a given string into its full form.
+        finds inner most nested group, expands then appends to string
+        @param: compressed_string string - '10[str3[dfdf]ing]dfdf56[tydh]'
+        @return: expanded string - 2[string] --> stringstring
     """
 
     # find all inner compressions
@@ -29,8 +37,6 @@ def decompressor(compressed_string):
 
     # if no compressions left retrun ans else call decompressor again
     return compressed_string if not block_index else decompressor(compressed_string)
-        
-    
 
 
 def test():
@@ -62,10 +68,7 @@ def test():
     print("All tests Passed!")
 
 def main():
-
     example = '3[ab0[grgrgrgrgr]c]4[ab]c'
-    # example = '20[3[a]b]'
-    # example = 'abc'
     answer = decompressor(example)
     assert answer == 'abcabcabcababababc', \
         "answer was %s, not abcabcabcababababc: " %answer
@@ -76,21 +79,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-    test_options = [
-            ['1[a2[b]c]', 'abbc'],
-            ['3[abc]4[ab]c', 'abcabcabcababababc'],
-            ['hithere21[break]', 'hitherebreakbreakbreakbreakbreakbreakbreakbreak'
-                                 'breakbreakbreakbreakbreakbreakbreakbreakbreak'
-                                 'breakbreakbreakbreak'],
-            ['2[2[2[a]b]c]d', 'aabaabcaabaabcd'],
-            ['nowordstest', 'nowordstest'],
-            ['extra characters', 'extra characters'],
-            ['long2[chain]withlots3[3[of]chain]1[and2[some2[recursion]]]',
-             'longchainchainwithlotsofofofchainofofofchainofofofchainand'
-             'somerecursionrecursionsomerecursionrecursion'],
-            ['2[2[2[2[2[2[a]b]c]d]e]f]g', 'aabaabcaabaabcdaabaabcaabaabcdeaabaabca'
-                                          'abaabcdaabaabcaabaabcdefaabaabcaabaabcd'
-                                          'aabaabcaabaabcdeaabaabcaabaabcdaabaabca'
-                                          'abaabcdefg']]
