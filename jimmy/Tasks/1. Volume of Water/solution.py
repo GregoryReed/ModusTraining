@@ -7,8 +7,16 @@
    Author: James Burgess (james-burgess.github.io)
 """
 
+import timeit
+
 
 def find_lake_volume(lake_data):
+    """Calculate the total volume in a lake.
+        makes a run from left to right and righ to left
+        finds dips ahead and appends to respective run array
+        comparison is made between both runs to find the smallest dip and
+        adds dip to answer.
+    """
     ans = 0
     lake_len = len(lake_data) - 1
     right_run = [0]
@@ -37,12 +45,14 @@ def find_lake_volume(lake_data):
         else:
             right_run.append(0)
 
+    # reverse right_run
     right_run = right_run[::-1]
 
     # add smallest dip to answer
     for i in range(lake_len):
         ans += min(left_run[i], right_run[i])
-    return(ans)
+
+    return ans
 
 
 def test():
@@ -155,6 +165,7 @@ def test():
     answer = find_lake_volume(test3)
     assert answer == 208, "Test1 - Answer was %s not 208" % answer
 
+
     answer = find_lake_volume(test4)
     assert answer == 129507, "Test4 - Answer was %s not 129507" % answer
 
@@ -164,7 +175,9 @@ def main():
     answer = find_lake_volume(example)
     assert answer == 15, "answer was not 15, answer was: " + str(answer)
 
-    test()
+    t = timeit.Timer(test)
+    print(t.timeit(1))
+
 
 if __name__ == '__main__':
     main()
