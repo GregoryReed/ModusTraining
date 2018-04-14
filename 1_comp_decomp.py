@@ -1,57 +1,83 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+import timeit
 
-def decompress(source, subs):
+
+def decompress(tight_object):
+    """ Pull out inner compressions, expand, re-insert and repeat by applying
+    recursion to the new string.
+    param: tight_object string
+    return: tight_object string
     """
-    :param source:
-    :param subs:
-    :return:
+    # Find num / value pairs of inner-most compressions
+    inners = re.findall(r"\d+\[+\w+]", tight_object)
+
+    # Replace num / value pairs with expanded pairs
+    for num_value in inners:
+        tight_object = tight_object.replace(num_value, expansion(num_value))
+
+    # Expand inner-most compressions
+    return tight_object if not inners else decompress(tight_object)
+
+def expansion(pair):
+    """ Extract the number in front of a bracketed string and multiply the
+    number by the string.
+    param: pair string
+    return: long_letters string
     """
-    # breaks recursive loop
-    if source == '':
-        return subs
-    # initialise
-    num_value = ''
-    letters = ''
-    lonely = ''
-    close_index = len(source) - 1
-    open_index = 0
-    left_zone = 0
-    num = 1
-    # finding trailing letters not in compressed string
-    if ']' not in source:
-        lonely = source
-    # counting from left to right
-    for i, value in enumerate(source):
-        if value == ']':
-            close_index = i
-            break
-    # counting left from inner close bracket until end compressed string num
-    for i in range(close_index - 1, -1, -1):
-        if source[i] != '[' and left_zone == 0:
-            letters = source[i] + letters
-        elif source[i] == '[' and left_zone == 0:
-            open_index = i
-            left_zone += 1
-        elif source[i] != '[' and left_zone == 1:
-            num_value = source[i:open_index]
-            num = int(num_value)
-        else:
-            break
-    # building decompressed string and removing compressed string from source
-    num_index = open_index - len(num_value)
-    subs = num * (subs + letters) + lonely
-    source = source[0:num_index] + source[close_index + 1:]
-    return decompress(source, subs)
+    # Split num / value into pairs
+    split_pair = pair.split('[')
 
-print(decompress('5[abc]4[ab]c', ''))
-print(decompress('2[3[a]b]', ''))
-print(decompress('0[abc]', ''))
-print(decompress('5[0[a]]abc', ''))
-print(decompress('5[1[a]]abc', ''))
-print(decompress('10[a]', ''))
-print(decompress('2[5[a]ab]', ''))
+    # Multiply pairs together
+    long_letters = int(split_pair[0]) * split_pair[1][:-1]
+
+    return long_letters
+
+def test():
+    # multidigit
+    test0 = '10[a]'
+    answer = decompress(test0)
+    assert answer == 'aaaaaaaaaa', \
+        "answer was {}, not aaaaaaaaaa: ".format(answer)
+    print(answer)
+
+    # nested
+    test1 = '2[3[a]b]'
+    answer = decompress(test1)
+    assert answer == 'aaabaaab', \
+        "answer was {}, not aaabaaab: ".format(answer)
+    print(answer)
+
+    # recursive
+    test2 = 'long2[chain]withlots3[3[of]chain]1[and2[some2[recursion]]]'
+    answer = decompress(test2)
+    assert answer == 'longchainchainwithlotsofofofchainofofofchainofofofchainandsomerecursionrecursionsomerecursionrecursion', \
+        "answer was {}, not longchainchainwithlotsofofofchainofofofchainofofofchainandsomerecursionrecursionsomerecursionrecursion: ".format(answer)
+    print(answer)
+
+    # banger
+    test3 = '2[2[2[2[2[2[a]b]c]d]e]f]g'
+    answer = decompress(test3)
+    assert answer == 'aabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefaabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefg', \
+        "answer was {}, not aabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefaabaabcaabaabcdaabaabcaabaabcdeaabaabcaabaabcdaabaabcaabaabcdefg: ".format(answer)
+    print(answer)
+
+    # by zero
+    test4 = '0[abc]'
+    answer = decompress(test4)
+    assert answer == '', "answer was {}, not".format(answer)
+    print(answer)
+
+    print("All tests Passed!")
 
 
+def main():
+    test()
+    t = timeit.Timer(test)
+    print(t.timeit(1))
 
+
+if __name__ == '__main__':
+    main()
