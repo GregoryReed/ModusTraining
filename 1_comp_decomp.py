@@ -40,19 +40,18 @@ def decompress(source, subs):
         else:
             break
     # building decompressed string and removing compressed string from source
-    subs = subs + num * letters + lonely
-    source = source[0:open_index-len(num_value)] + source[close_index+1:]
-
+    num_index = open_index - len(num_value)
+    subs = num * (subs + letters) + lonely
+    source = source[0:num_index] + source[close_index + 1:]
     return decompress(source, subs)
 
+print(decompress('5[abc]4[ab]c', ''))
+print(decompress('2[3[a]b]', ''))
+print(decompress('0[abc]', ''))
+print(decompress('5[0[a]]abc', ''))
+print(decompress('5[1[a]]abc', ''))
+print(decompress('10[a]', ''))
+print(decompress('2[5[a]ab]', ''))
 
-
-
-
-# print(decompress('10[abc]4[ab]c', ''))
-# print(decompress('2[3[a]b]', ''))
-# print(decompress('0[abc]', '')
-# print(decompress('10[a]', '')
-# print(decompress('a[]b', ''))
 
 
