@@ -176,7 +176,7 @@ def main():
     assert answer == 15, "answer was not 15, answer was: " + str(answer)
 
     t = timeit.Timer(test)
-    print(t.timeit(1))
+    print(t.timeit(200)/100)
 
 
 if __name__ == '__main__':
