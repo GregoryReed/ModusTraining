@@ -8,8 +8,8 @@ import timeit
 def decompress(tight_object):
     """ Pull out inner compressions, expand, re-insert and repeat by applying
     recursion to the new string.
-    param: tight_object string
-    return: tight_object string
+    :param tight_object: string
+    :return tight_object: string
     """
     # Find num / value pairs of inner-most compressions
     inners = re.findall(r"\d+\[+\w+]|\d+\[+]", tight_object)
@@ -37,6 +37,7 @@ def expansion(pair):
     long_letters = int(split_pair[0]) * split_pair[1][:-1]
 
     return long_letters
+
 
 def test():
     # multidigit
