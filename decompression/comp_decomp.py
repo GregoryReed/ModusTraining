@@ -27,8 +27,8 @@ def decompress(tight_object):
 def expansion(pair):
     """ Extract the number in front of a bracketed string and multiply the
     number by the string.
-    param: pair string
-    return: long_letters string
+    :param pair: string
+    :return long_letters: string
     """
     # Split num / value into pairs
     split_pair = pair.split('[')
