@@ -9,11 +9,11 @@ without forcing assertions. */
 class Solution {
     public int distributeCandies(int[] candies) {
         /* This function receives an even number of candies (list of ints).
-        Each different number represents a different types of candy.
+        Each different number represents a different type of candy.
         The total candies are divided by two. This function returns the most
         unique candy types that each of the two halves can accrue.
-        param int [] candies: an array of ints
-        return int: the largest number of unique candies per half share
+        :param int [] candies: an array of ints
+        :return int: the largest number of unique candies per half share
         */
         // remove repititions
         HashSet < Integer > set = new HashSet < > ();
