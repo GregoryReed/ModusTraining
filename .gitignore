@@ -8,3 +8,6 @@
 .idea/ModusTraining.iml
 .idea/vcs.xml
 .idea/
+
+jordan/.pytest_cache
+jordan/__pycache__
