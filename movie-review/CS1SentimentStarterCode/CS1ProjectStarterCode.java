@@ -2,18 +2,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.PrintWriter;
-import java.io.File;
-import java.io.IOException;
 
 /*
  * This is code I wrote with students in class to demonstrate how to read from the movie review file.
- * It searches each review for the queried word and just prints out the score of that review along 
+ * It searches each review for the queried word and just prints out the score of that review along
  * with its text to ensure that we can read the two values and use the .contains() method properly.
  */
-public class CS1ProjectStarterCode 
+public class CS1ProjectStarterCode
 {
-	public static void main(String[] args) throws FileNotFoundException 
+	public static void main(String[] args) throws FileNotFoundException
 	{
 		File reviewFile = new File("movieReviews.txt");
 		Scanner reviewScanner = new Scanner(reviewFile);
@@ -88,25 +85,12 @@ public class CS1ProjectStarterCode
 		    }
             reviewAve = totScore / wordTracker;
             if (reviewAve > 2.01) {
-                 try (PrintWriter positive = new PrintWriter("positive.txt")) {
-                     positive.println(wordIn);
-                 }
-                 catch ( IOException e) {
-                     System.out.println(
-                     "Sorry but I was unable to open your data file");
-                     e.printStackTrace();
-                     System.exit(0);
-                 }
+                 highestScore = reviewAve;
+                 highestWord = wordIn;
+            }
             if (reviewAve < 1.99) {
-                 try (PrintWriter negative = new PrintWriter("negative.txt")){
-                     negative.println(wordIn);
-                 }
-                 catch ( IOException e) {
-                     System.out.println(
-                     "Sorry but I was unable to open your data file");
-                     e.printStackTrace();
-                     System.exit(0);
-                 }
+                 lowestScore = reviewAve;
+                 lowestWord = wordIn;
             }
             combinedScore = combinedScore + reviewAve;
             uniqueWordCount += 1;
@@ -127,5 +111,4 @@ public class CS1ProjectStarterCode
         System.out.println("The overall sentiment of " + fileName
         + " is " + sentiment + ".");
 	}
-}
 }
