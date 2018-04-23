@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.IOException;
 
 /*
  * This is code I wrote with students in class to demonstrate how to read from the movie review file.
@@ -34,6 +37,10 @@ public class CS1ProjectStarterCode
 		double uniqueWordCount = 0;
 		double combinedAve;
 		String sentiment;
+		String highestWord = "highest";
+		double highestScore = 0;
+		String lowestWord = "lowest";
+		double lowestScore = 10;
 
 		System.out.println("Enter a word.");
 		word = keyboard.nextLine();
@@ -80,6 +87,27 @@ public class CS1ProjectStarterCode
 			    }
 		    }
             reviewAve = totScore / wordTracker;
+            if (reviewAve > 2.01) {
+                 try (PrintWriter positive = new PrintWriter("positive.txt")) {
+                     positive.println(wordIn);
+                 }
+                 catch ( IOException e) {
+                     System.out.println(
+                     "Sorry but I was unable to open your data file");
+                     e.printStackTrace();
+                     System.exit(0);
+                 }
+            if (reviewAve < 1.99) {
+                 try (PrintWriter negative = new PrintWriter("negative.txt")){
+                     negative.println(wordIn);
+                 }
+                 catch ( IOException e) {
+                     System.out.println(
+                     "Sorry but I was unable to open your data file");
+                     e.printStackTrace();
+                     System.exit(0);
+                 }
+            }
             combinedScore = combinedScore + reviewAve;
             uniqueWordCount += 1;
         }
@@ -99,4 +127,5 @@ public class CS1ProjectStarterCode
         System.out.println("The overall sentiment of " + fileName
         + " is " + sentiment + ".");
 	}
+}
 }
