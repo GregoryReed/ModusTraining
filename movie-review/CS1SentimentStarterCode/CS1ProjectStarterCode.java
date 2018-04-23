@@ -52,8 +52,6 @@ public class CS1ProjectStarterCode
 			    {
 			        totalScore = totalScore + reviewScore;
 			        wordCount += 1;
-				    // System.out.println("Score: "+reviewScore);
-				    // System.out.println("Text: "+reviewText);
 			    }
 		    }
         reviewAverage = totalScore / wordCount;
@@ -110,5 +108,9 @@ public class CS1ProjectStarterCode
         + " is " + combinedAve + ".");
         System.out.println("The overall sentiment of " + fileName
         + " is " + sentiment + ".");
+        System.out.println("The most positive word, with a score of "
+        + highestScore + " is " + highestWord);
+        System.out.println("The most negative word, with a score of "
+        + lowestScore + " is " + lowestWord);
 	}
 }
