@@ -1,77 +1,49 @@
 import timeit
-from functools import reduce
-from itertools import repeat
 
-import numpy
 
-# def volume_of_water(island_heights):
-#     total = 0
-#     heights = sorted(set(island_heights))
-#     for height in heights:
-#         for location, depth in enumerate(island_heights):
-#             if height > depth and any(depth < numpy.array(island_heights[location+1:])) and any(depth < numpy.array(island_heights[:location])):
-#                 total += height - depth
-#                 island_heights[location] = height
-#     return total
-
-# cu_max = 0
-# def volume_of_water(island_heights):
-#     global cu_max
-#     cu_max = min(island_heights)
-#
-#     def if_map(point, location):
-#         global cu_max
-#         if point >= cu_max:
-#             cu_max = point
-#             return 0
-#         if max(island_heights[location + 1:]) > point:
-#             return min([max(island_heights[location + 1:]), cu_max]) - point
-#         return 0
-#     map_data = list(map(if_map, island_heights[:-1], range(len(island_heights[:-1]))))
-#     return reduce((lambda x, y: x + y), map_data)
-
-# def volume_of_water(island_heights, total=0):
-#     cu_max = island_heights[0]
-#     total_peak = island_heights.index(max(island_heights))
-#     for location, point in enumerate(island_heights[:total_peak]):
-#         if point >= cu_max:
-#             cu_max = point
-#             continue
-#         total += cu_max - point
-#     cu_max = island_heights[-1]
-#     for location, point in reversed(list(enumerate(island_heights[total_peak:]))):
-#         if point >= cu_max:
-#             cu_max = point
-#             continue
-#         total += cu_max - point
-#     return total
-
-def volume_of_water(island_heights, total=0):
+def volume_of_water(island_heights: list) -> int:
+    """
+    Calculate the volume of water 
+    in a 2 dimensional representation of an island
+    :param island_heights: A list of island heights in a 2 dimensional list
+    :return: the total depth of all the lakes of an island
+    """
+    total = 0
+    # Get the highest point and the starting point of the island
     cu_max = island_heights[0]
     total_peak = island_heights.index(max(island_heights))
+
+    # Get all the depths between the starting point and the first peak
     for location in range(len(island_heights[:total_peak])):
-        point = island_heights[location]
-        if point >= cu_max:
-            cu_max = point
-            continue
-        total += cu_max - point
+        total += get_hole_depth(cu_max, island_heights, location)
+
+    # Get all the depths from the edge and the original peak
     cu_max = island_heights[-1]
-    for location in range(len(island_heights[total_peak:])):
-        point = island_heights[-(location+1)]
-        if point >= cu_max:
-            cu_max = point
-            continue
-        total += cu_max - point
+    for location in range(len(island_heights)-1,
+                          len(island_heights[total_peak:])-1,
+                          -1):
+        total += get_hole_depth(cu_max, island_heights, location)
     return total
 
-# def volume_of_water(island_heights, total=0):
-#     cu_max = min(island_heights)
-#     for location, point in enumerate(island_heights[:-1]):
-#         cu_max = point if point >= cu_max else cu_max
-#         max_hi = max(island_heights[location+1:])
-#         if  max_hi > point:
-#             total += min([max_hi, cu_max]) - point
-#     return total
+
+def get_hole_depth(current_max: int, island_heights: list, location: int) -> int:
+    """
+    Return the amount of water that would accumulate above the current point
+    :param current_max: the current max height between the side
+        and the current point
+    :param island_heights: a list of the island heights
+    :param location: the location in the list of island heights to get
+        the amount of water that would accumulate above
+    :return: 
+    """
+    point = island_heights[location]
+    # If the current location is greater or equal
+    # To the highest point between the current point and the edge,
+    # All the water would run off the edge
+    if point >= current_max:
+        current_max = point
+    return current_max - point
+
 
 def test():
     # small v
