@@ -4,8 +4,8 @@ from compress_decompression import decompression
 from candies import get_candies
 from volume_of_water import volume_of_water
 
-def test_decompression():
 
+def test_decompression():
     # multidigit
     test0 = '10[a]'
     answer = decompression(test0)

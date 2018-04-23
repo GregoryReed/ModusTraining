@@ -13,7 +13,9 @@ def volume_of_water(island_heights: list) -> int:
     total_peak = island_heights.index(max(island_heights))
 
     # Get all the depths between the starting point and the first peak
-    for location in range(len(island_heights[:total_peak])):
+    for location in range(total_peak):
+        # Code could be extracted as a function,
+        # but it doubles the time the function takes to run
         point = island_heights[location]
         # If the current location is greater or equal
         # To the highest point between the current point and the edge,
@@ -25,6 +27,8 @@ def volume_of_water(island_heights: list) -> int:
     # Get all the depths from the edge and the original peak
     cu_max = island_heights[-1]
     for location in range(len(island_heights)-1, total_peak, -1):
+        # Code could be extracted as a function,
+        # but it doubles the time the function takes to run
         point = island_heights[location]
         # If the current location is greater or equal
         # To the highest point between the current point and the edge,
