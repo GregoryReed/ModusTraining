@@ -204,7 +204,7 @@ def main():
     assert answer == 3, 'you dun goofed'
 
     t = timeit.Timer(test)
-    print(t.timeit(200)/100)
+    print(t.timeit(2000)/1000)
 
 
 

@@ -12,7 +12,7 @@ import timeit
 
 def find_lake_volume(lake_data):
     """Calculate the total volume in a lake.
-        makes a run from left to right and righ to left
+        makes a run from left to right and right to left
         finds dips ahead and appends to respective run array
         comparison is made between both runs to find the smallest dip and
         adds dip to answer.
