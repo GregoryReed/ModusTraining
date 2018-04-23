@@ -2,8 +2,8 @@
 
 def volume_of_water(island_heights: list) -> int:
     """
-    Calculate the volume of water 
-    in a 2 dimensional representation of an island
+    Calculate the volume of water that would be present in a
+        2 dimensional representation of an island
     :param island_heights: A list of island heights in a 2 dimensional list
     :return: the total depth of all the lakes of an island
     """
