@@ -10,7 +10,7 @@
 import timeit
 
 
-def find_lake_volume(lake_data):
+def find_lake_volume(lake_data: list) -> int:
     """Calculate the total volume in a lake.
         makes a run from left to right and right to left
         finds dips ahead and appends to respective run array

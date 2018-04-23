@@ -9,7 +9,7 @@
 import timeit
 import re
 
-def expand(block):
+def expand(block: str) -> str:
     """expand a string according to the number in the beginning.
     @param: block str - '10[string]'
     @return: string - 2[string] --> stringstring
@@ -21,7 +21,7 @@ def expand(block):
     return int(block[0]) * block[1][:-1]
 
 
-def decompressor(compressed_string):
+def decompressor(compressed_string: str) -> str:
     """recursivley decompress a given string into its full form.
         finds inner most nested group, expands then appends to string
         @param: compressed_string string - '10[str3[dfdf]ing]dfdf56[tydh]'

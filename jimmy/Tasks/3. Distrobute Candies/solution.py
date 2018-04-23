@@ -10,7 +10,7 @@
 import timeit
 
 
-def distribute(candy_list: list):
+def distribute(candy_list: list) -> int:
     """
     returns the maximum different candies one person can recieve.
     :param candy_list: list [int]
